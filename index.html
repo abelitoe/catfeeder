@@ -3,48 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Cat Feeder - DB Version</title>
+    <title>Smart Cat Feeder - Ultimate</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: auto; display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media(min-width: 768px) { .container { grid-template-columns: 1fr 1fr; } .full-width { grid-column: span 2; } }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .container { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
         h2 { font-size: 18px; margin-top: 0; color: #2c3e50; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
         
-        /* Sensor & Status */
+        /* Sensor Box Styling */
         .sensor-value { font-size: 42px; font-weight: 600; color: #2c3e50; }
         .sensor-unit { font-size: 16px; color: #7f8c8d; }
-        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 50px; font-weight: 600; font-size: 14px; margin-top: 10px; }
+        .status-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 50px; 
+            font-weight: 600; font-size: 14px; margin-top: 10px;
+        }
         .status-safe { background: #d5f5e3; color: #27ae60; }
         .status-empty { background: #fadbd8; color: #c0392b; }
 
-        /* Button */
-        .btn-feed { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+        /* Button Styling */
+        .btn-feed {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white; border: none; padding: 15px; width: 100%;
+            border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
         .btn-feed:active { transform: scale(0.98); }
         .btn-feed:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-        /* Switch */
+        /* Switch Styling */
         .switch-container { display: flex; align-items: center; justify-content: space-between; margin-top: 15px; }
-        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch {
+            position: relative; display: inline-block; width: 50px; height: 26px;
+        }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
         input:checked + .slider { background-color: #2196F3; }
         input:checked + .slider:before { transform: translateX(24px); }
 
-        /* Schedule */
+        /* Schedule List */
         .schedule-input { display: flex; gap: 10px; margin-bottom: 15px; }
         .schedule-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
         .btn-add { background: #2196F3; color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; }
-        .schedule-list { list-style: none; padding: 0; max-height: 200px; overflow-y: auto; }
-        .schedule-item { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; }
-        .btn-del { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-left: 10px; font-size: 12px; }
         
-        /* Chart */
+        .schedule-list { list-style: none; padding: 0; }
+        .schedule-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: #f8f9fa; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; 
+        }
+        .btn-del { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-left: 10px; }
+        
+        /* Grafik */
         canvas { width: 100% !important; height: 250px !important; }
     </style>
 </head>
@@ -65,22 +109,21 @@
             <div class="switch-container">
                 <span><b>Auto Refill</b> (Jika sensor < 15cm)</span>
                 <label class="switch">
-                    <input type="checkbox" id="autoSensorSwitch" onchange="updateAutoMode()">
+                    <input type="checkbox" id="autoSensorSwitch">
                     <span class="slider"></span>
                 </label>
             </div>
-            <small style="color: #777;">*Disinkronkan dengan ESP32 via Database</small>
+            <small style="color: #777;">*Jika ON, pakan turun otomatis saat wadah kosong.</small>
         </div>
 
         <div class="card">
-            <h2>⏰ Atur Jadwal (Database)</h2>
+            <h2>⏰ Atur Jadwal Makan</h2>
             <div class="schedule-input">
                 <input type="time" id="timeInput">
                 <button class="btn-add" onclick="addSchedule()">Simpan</button>
             </div>
             <ul id="scheduleList" class="schedule-list">
-                <li style="text-align:center; color:#999;">Memuat jadwal...</li>
-            </ul>
+                </ul>
         </div>
 
         <div class="card full-width">
@@ -94,110 +137,161 @@
         const ctx = document.getElementById('feedChart').getContext('2d');
         const feedChart = new Chart(ctx, {
             type: 'line',
-            data: { labels: [], datasets: [{ label: 'Jarak (cm)', data: [], borderColor: '#2196F3', backgroundColor: 'rgba(33, 150, 243, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, reverse: true }, x: { display: false } } }
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Jarak Sensor (cm)',
+                    data: [],
+                    borderColor: '#2196F3',
+                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, reverse: true, title: {display: true, text: 'Jarak (Semakin kecil = Penuh)'} },
+                    x: { title: {display: true, text: 'Waktu Update'} }
+                }
+            }
         });
 
-        // --- LOAD DATA AWAL (JADWAL & PENGATURAN) ---
-        function loadSettings() {
-            $.getJSON("api.php?action=get_settings", function(data) {
-                // 1. Update Switch Auto Refill
-                $("#autoSensorSwitch").prop("checked", data.mode_auto == 1);
+        // --- VARIABEL GLOBAL ---
+        let currentDistance = 0;
+        let schedules = JSON.parse(localStorage.getItem('catSchedules')) || [];
+        let lastAutoFeed = 0; // Mencegah spamming feed di auto mode
 
-                // 2. Render List Jadwal
-                const list = $("#scheduleList");
-                list.empty();
-                
-                if (data.jadwal.length === 0) {
-                    list.append('<li style="text-align:center; color:#999;">Belum ada jadwal</li>');
-                } else {
-                    data.jadwal.forEach(sch => {
-                        // Format jam menit jadi HH:MM (tambah 0 di depan jika perlu)
-                        let jamStr = sch.jam.toString().padStart(2, '0');
-                        let menitStr = sch.menit.toString().padStart(2, '0');
-                        
-                        list.append(`
-                            <li class="schedule-item">
-                                <b>${jamStr}:${menitStr}</b>
-                                <button class="btn-del" onclick="deleteSchedule(${sch.id})">Hapus</button>
-                            </li>
-                        `);
-                    });
-                }
-            });
-        }
-
-        // --- FUNGSI UPDATE MODE AUTO ---
-        function updateAutoMode() {
-            const isChecked = $("#autoSensorSwitch").is(":checked") ? 1 : 0;
-            $.post("api.php?action=update_mode", { mode: isChecked }, function(res) {
-                console.log("Mode Auto tersimpan: " + isChecked);
-            });
-        }
-
-        // --- FUNGSI TAMBAH JADWAL ---
-        function addSchedule() {
-            const timeVal = $("#timeInput").val(); // Format "17:30"
-            if(!timeVal) return alert("Pilih jam dulu!");
-            
-            const [jam, menit] = timeVal.split(":");
-            
-            $.post("api.php?action=add_schedule", { jam: jam, menit: menit }, function(res) {
-                loadSettings(); // Refresh list setelah simpan
-                $("#timeInput").val(""); // Clear input
-            });
-        }
-
-        // --- FUNGSI HAPUS JADWAL ---
-        function deleteSchedule(id) {
-            if(!confirm("Hapus jadwal ini?")) return;
-            $.post("api.php?action=delete_schedule", { id: id }, function(res) {
-                loadSettings(); // Refresh list setelah hapus
-            });
-        }
-
-        // --- MONITORING SENSOR ---
-        function updateSensorData() {
+        // --- FUNGSI UTAMA ---
+        function updateData() {
             $.getJSON("api.php?action=get_web_data", function(data) {
                 if(data) {
-                    const jarak = parseFloat(data.jarak);
-                    $("#jarak").text(jarak.toFixed(2));
+                    currentDistance = parseFloat(data.jarak);
+                    const timestamp = new Date().toLocaleTimeString();
+
+                    // Update Angka
+                    $("#jarak").text(currentDistance.toFixed(2));
                     
+                    // Update Status Badge
                     const statusEl = $("#statusBadge");
-                    if(jarak > 19.6) { // Sesuaikan dengan BATAS_KOSONG di Arduino
+                    if(currentDistance > 15) { 
                         statusEl.text("HABIS / KOSONG").removeClass("status-safe").addClass("status-empty");
+                        checkAutoSensorFeed(); // Cek apakah perlu auto feed
                     } else {
                         statusEl.text("AMAN / TERISI").removeClass("status-empty").addClass("status-safe");
                     }
 
                     // Update Grafik
-                    const time = new Date().toLocaleTimeString();
-                    if (feedChart.data.labels.length > 20) {
-                        feedChart.data.labels.shift();
-                        feedChart.data.datasets[0].data.shift();
-                    }
-                    feedChart.data.labels.push(time);
-                    feedChart.data.datasets[0].data.push(jarak);
-                    feedChart.update();
+                    addDataToChart(timestamp, currentDistance);
                 }
             });
         }
 
+        function addDataToChart(label, data) {
+            feedChart.data.labels.push(label);
+            feedChart.data.datasets[0].data.push(data);
+            
+            // Batasi hanya menampilkan 20 data terakhir agar grafik tidak menumpuk
+            if (feedChart.data.labels.length > 20) {
+                feedChart.data.labels.shift();
+                feedChart.data.datasets[0].data.shift();
+            }
+            feedChart.update();
+        }
+
+        // --- LOGIKA FEEDING ---
         function manualFeed() {
             $("#btnFeed").text("Memproses...").prop("disabled", true);
-            $.post("api.php?action=trigger_feed", function() {
-                setTimeout(() => { 
-                    alert("Perintah dikirim ke ESP32!"); 
+            
+            $.post("api.php?action=trigger_feed", function(response) {
+                // Beri tanda visual di grafik (opsional, grafik akan update sendiri saat sensor berubah)
+                setTimeout(() => {
+                    alert("Pakan diberikan! Grafik akan berubah sesaat lagi.");
                     $("#btnFeed").text("BERI MAKAN SEKARANG").prop("disabled", false);
                 }, 1000);
             });
         }
 
+        // --- LOGIKA AUTO SENSOR ---
+        function checkAutoSensorFeed() {
+            const isAutoOn = $("#autoSensorSwitch").is(":checked");
+            const now = Date.now();
+            
+            // Jika Mode ON, Jarak > 15 (Kosong), dan belum feed dalam 1 menit terakhir
+            if(isAutoOn && currentDistance > 15 && (now - lastAutoFeed > 60000)) {
+                console.log("Auto Refill Triggered by Sensor!");
+                manualFeed();
+                lastAutoFeed = now;
+            }
+        }
+
+        // --- LOGIKA JADWAL (Web Trigger) ---
+        function renderSchedules() {
+            const list = $("#scheduleList");
+            list.empty();
+            schedules.forEach((sch, index) => {
+                const isActive = sch.active ? 'checked' : '';
+                list.append(`
+                    <li class="schedule-item">
+                        <span>${sch.time}</span>
+                        <div>
+                            <label class="switch" style="transform: scale(0.8);">
+                                <input type="checkbox" onchange="toggleSchedule(${index})" ${isActive}>
+                                <span class="slider"></span>
+                            </label>
+                            <button class="btn-del" onclick="deleteSchedule(${index})">Hapus</button>
+                        </div>
+                    </li>
+                `);
+            });
+            localStorage.setItem('catSchedules', JSON.stringify(schedules));
+        }
+
+        function addSchedule() {
+            const timeVal = $("#timeInput").val();
+            if(!timeVal) return alert("Pilih jam dulu!");
+            
+            schedules.push({ time: timeVal, active: true, lastTrigger: null });
+            renderSchedules();
+        }
+
+        function deleteSchedule(index) {
+            schedules.splice(index, 1);
+            renderSchedules();
+        }
+
+        function toggleSchedule(index) {
+            schedules[index].active = !schedules[index].active;
+            renderSchedules();
+        }
+
+        function checkScheduleTime() {
+            const now = new Date();
+            const currentHM = now.toTimeString().substring(0, 5); // Format "18:16"
+            const todayDate = now.toDateString(); // Format "Thu Dec 25 2025"
+
+            schedules.forEach(sch => {
+                if(sch.active && sch.time === currentHM) {
+                    // Cek apakah sudah dijalankan hari ini agar tidak spamming
+                    if(sch.lastTrigger !== todayDate) {
+                        console.log("Schedule Triggered: " + sch.time);
+                        manualFeed();
+                        sch.lastTrigger = todayDate;
+                        renderSchedules(); // Simpan lastTrigger ke localStorage
+                    }
+                }
+            });
+        }
+
         // --- INISIALISASI ---
-        $(document).ready(function() {
-            loadSettings(); // Ambil jadwal dari DB saat web dibuka
-            setInterval(updateSensorData, 2000); // Update sensor real-time
-        });
+        renderSchedules();
+        
+        // Loop Update Data & Cek Jadwal
+        setInterval(updateData, 2000); // Sensor update tiap 2 detik
+        setInterval(checkScheduleTime, 1000); // Cek jadwal tiap detik
+
     </script>
 </body>
 </html>
